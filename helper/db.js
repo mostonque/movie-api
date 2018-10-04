@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = () => {
-    mongoose.connect('mongodb://movieapp:sanane123@ds215093.mlab.com:15093/movie-app-db',{ useNewUrlParser: true });
+    mongoose.connect('mongodb://serhat:sanane123@ds223063.mlab.com:23063/movie-app',{ useNewUrlParser: true });
     mongoose.connection.on('open',()=>{
         console.log('MONGODB : Bağlantı kuruldu');
     });

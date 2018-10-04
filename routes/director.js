@@ -1,30 +1,66 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const Directors=require('../models/Director');
 
-router.post('/', (req, res, next)=> {
-    // 1. yol bu
-    /* const {name,surname,bio}=req.body;
-    Director=new Directors({
-        name:name,
-        surname: surname,
-        bio:bio,
-    });
-    Director.save((err,data)=>{
-        if (err)
-            res.json (err);
+// Models
+const Director = require('../models/Director');
+
+router.post('/', (req, res, next) => {
+    const director = new Director(req.body);
+    const promise = director.save();
+
+    promise.then((data) => {
         res.json(data);
-    });
-    */
-    //ikinci yol
-    const director=new Directors(req.body);
-    const promise=director.save();
-    promise.then((data)=>{
+    }).catch((err) => {
+        res.json(err);
+    })
+});
+
+router.get('/', (req, res) => {
+    const promise = Director.aggregate([
+        {
+            $lookup: {
+                from: 'movies',
+                localField: '_id',
+                foreignField: 'directorId',
+                as: 'movies'
+            }
+        },
+        {
+            $unwind:{
+                path:"$movies",
+                preserveNullAndEmptyArrays:true
+            }
+        },
+        {
+            $group: {
+                _id:{
+                    _id:'$_id',
+                    name:'$name',
+                    surname:'$surname',
+                    bio: '$bio'
+                },
+                movies:{
+                    $push:'$movies'
+                }
+            }
+        },
+        {
+            $project:{
+                _id:'$_id._id',
+                name: '$_id.name',
+                surname:'$_id.surname',
+                movies: '$movies'
+            }
+        }
+
+    ]);
+
+    promise.then((data) => {
         res.json(data);
-    }).catch((err)=>{
+    }).catch((err) => {
         res.json(err);
     });
-
 });
 
 module.exports = router;
