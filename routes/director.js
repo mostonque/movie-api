@@ -27,29 +27,29 @@ router.get('/', (req, res) => {
             }
         },
         {
-            $unwind:{
-                path:"$movies",
-                preserveNullAndEmptyArrays:true
+            $unwind: {
+                path: "$movies",
+                preserveNullAndEmptyArrays: true
             }
         },
         {
             $group: {
-                _id:{
-                    _id:'$_id',
-                    name:'$name',
-                    surname:'$surname',
+                _id: {
+                    _id: '$_id',
+                    name: '$name',
+                    surname: '$surname',
                     bio: '$bio'
                 },
-                movies:{
-                    $push:'$movies'
+                movies: {
+                    $push: '$movies'
                 }
             }
         },
         {
-            $project:{
-                _id:'$_id._id',
+            $project: {
+                _id: '$_id._id',
                 name: '$_id.name',
-                surname:'$_id.surname',
+                surname: '$_id.surname',
                 movies: '$movies'
             }
         }
@@ -69,9 +69,11 @@ router.get('/:director_id', (req, res) => {
             $match: {
                 //böyle yazınca boş array döner. çünkü '_id' değişkeni ObjectId tipinde
                 //bir veri olduğu için önce mongoose u sayfamıza dahil etmemiz gerekiyor.
-                // ekledikten sonra mongoose.Types.ObjectId metodunu ekememiz gerekiyor aşağıdaki gibi
-                // mongoose.Types daki mongoose yazısı, yukarda mongoose a verdiğimiz değişken adını alır.
-                '_id':mongoose.Types.ObjectId(req.params.director_id)
+                // ekledikten sonra mongoose.Types.ObjectId metodunu ekememiz gerekiyor
+                // aşağıdaki gibi
+                // mongoose.Types daki mongoose yazısı,
+                // yukarda mongoose a verdiğimiz değişken adını alır.
+                '_id': mongoose.Types.ObjectId(req.params.director_id)
             }
         },
         {
@@ -83,29 +85,29 @@ router.get('/:director_id', (req, res) => {
             }
         },
         {
-            $unwind:{
-                path:"$movies",
-                preserveNullAndEmptyArrays:true
+            $unwind: {
+                path: "$movies",
+                preserveNullAndEmptyArrays: true
             }
         },
         {
             $group: {
-                _id:{
-                    _id:'$_id',
-                    name:'$name',
-                    surname:'$surname',
+                _id: {
+                    _id: '$_id',
+                    name: '$name',
+                    surname: '$surname',
                     bio: '$bio'
                 },
-                movies:{
-                    $push:'$movies'
+                movies: {
+                    $push: '$movies'
                 }
             }
         },
         {
-            $project:{
-                _id:'$_id._id',
+            $project: {
+                _id: '$_id._id',
                 name: '$_id.name',
-                surname:'$_id.surname',
+                surname: '$_id.surname',
                 movies: '$movies'
             }
         }
@@ -119,5 +121,23 @@ router.get('/:director_id', (req, res) => {
     });
 });
 
+router.put('/:director_id', (req, res, next) => {
+    const promise = Director.findByIdAndUpdate(
+        req.params.director_id,
+        req.body,
+        {
+            new: true
+        }
+    );
+
+    promise.then((director) => {
+        if (!director)
+            next({ message: 'The movie was not found.', code: 99 });
+
+        res.json(director);
+    }).catch((err) => {
+        res.json(err);
+    });
+});
 
 module.exports = router;

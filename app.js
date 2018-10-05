@@ -32,7 +32,7 @@ app.use('/api/movies', movie);
 app.use('/api/directors', director);
 
 app.use((err, req, res) => {
-    console.log('heyy11');
+    console.log('asdaso')
 });
 
 // catch 404 and forward to error handler
