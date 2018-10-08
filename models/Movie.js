@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const Schema  = mongoose.Schema;
+/*
+{PATH}= hangi propertinin içinde yazılıyorsa o propertinin adını verir.
+aşağıdaki örnekte path yazan yerlere direk title gelir.
+{VALUE}=propertinin içideki değerdir.yani title propertisinin içine yazılan data dır.
+{MINLENGHT}  en az girilecek veri sayısını ekrana yazdırır.
+{MAXLENGHT}  en fazla girilecek veri sayısını ekrana yadırır.
 
+*/
 const MovieSchema = new Schema({
     directorId: Schema.Types.ObjectId,
     title: {

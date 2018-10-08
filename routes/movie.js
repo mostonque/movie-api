@@ -9,14 +9,15 @@ router.get('/', (req, res) => {
         {
             $lookup: {
                 from: 'directors',
-                localField: '_id',
-                foreignField: 'directorId',
+                localField: 'directorId',
+                foreignField: '_id',
                 as: 'director'
             }
         },
         {
             $unwind: '$director'
-        }
+        },
+
     ]);
 
     promise.then((data) => {
