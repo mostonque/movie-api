@@ -24,5 +24,6 @@ module.exports=(req,res,next)=>{    //body post metodunda olur
             status:false,
             message:'No token provided'
         });
+
     }
 };
