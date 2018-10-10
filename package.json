@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha --exit" //test klasörü içinde başka bir klasöre koyarsak eğer js dosyasını
-                           // --recursive komutunuda --exit komutunun yanına eklememiz gerekir.
+    "test": "mocha --exit"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
