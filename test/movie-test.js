@@ -60,7 +60,7 @@ describe('/api/movies tests', () => {
                 });
         });
     });
-    describe('/GET/:directorId movie',()=>{
+    describe('/GET/:movie_id movie',()=>{
         it('director id ile movie getirmeli', (done)=> {
             chai.request(server)
                 .get('/api/movies/'+ MovieId)
@@ -80,4 +80,44 @@ describe('/api/movies tests', () => {
         });
     });
 
+    describe('/UPDATE movie', () => {
+        it('film GÜNCELLEMELİ', (done) => {
+            const movie = {
+                title: 'FİLM 1212',
+                directorId: '5bbf3215b740660a78bd0467',
+                category: 'GERİLİM',
+                country: 'MACARİSTAN',
+                year:1945,
+                imdb_score: 6.2
+            };
+            chai.request(server)
+                .put('/api/movies/'+MovieId)
+                .send(movie)
+                .set('x-access-token', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('title').eql(movie.title);
+                    res.body.should.have.property('directorId').eql(movie.directorId);
+                    res.body.should.have.property('category').eql(movie.category);
+                    res.body.should.have.property('country').eql(movie.country);
+                    res.body.should.have.property('year').eql(movie.year);
+                    res.body.should.have.property('imdb_score').eql(movie.imdb_score);
+                    done();
+                });
+        });
+    });
+    describe('/DELETE movie', () => {
+        it('film SİLMELİ', (done) => {
+            chai.request(server)
+                .delete('/api/movies/'+MovieId)
+                .set('x-access-token', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql(1);
+                    done();
+                });
+        });
+    });
 });
