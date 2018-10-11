@@ -5,7 +5,7 @@ const server = require('../app');
 
 chai.use(chaiHttp);
 
-let token;
+let token, MovieId;
 
 describe('/api/movies tests', () => {
     before((done) => {
@@ -31,20 +31,39 @@ describe('/api/movies tests', () => {
                 });
         });
     });
-    describe('/POST movie', () => {
-        it('film ekleme', (done) => {
-            const movie={
-                title:'serhat',
-                directorId: '5bbb27e97bf48b455cca743c',
-                category: 'Horror',
-                country:'Türkiye',
-                year:1952,
-                imdb_score:9.4
-            };
 
+    describe('/POST movie', () => {
+        it('film eklemeli', (done) => {
+            const movie = {
+                title: 'FİLMİM123',
+                directorId: '5bbf3215b740660a78bd0467',
+                category: 'Korku',
+                country: 'SPAİN',
+                year:1945,
+                imdb_score: 6.2
+            };
             chai.request(server)
                 .post('/api/movies')
                 .send(movie)
+                .set('x-access-token', token)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('title');
+                    res.body.should.have.property('directorId');
+                    res.body.should.have.property('category');
+                    res.body.should.have.property('country');
+                    res.body.should.have.property('year');
+                    res.body.should.have.property('imdb_score');
+                    MovieId = res.body._id;
+                    done();
+                });
+        });
+    });
+    describe('/GET/:directorId movie',()=>{
+        it('director id ile movie getirmeli', (done)=> {
+            chai.request(server)
+                .get('/api/movies/'+ MovieId)
                 .set('x-access-token',token)
                 .end((err,res)=>{
                     res.should.have.status(200);
@@ -55,8 +74,10 @@ describe('/api/movies tests', () => {
                     res.body.should.have.property('country');
                     res.body.should.have.property('year');
                     res.body.should.have.property('imdb_score');
+                    res.body.should.have.property('_id').eql(MovieId);
                     done();
                 });
         });
     });
+
 });

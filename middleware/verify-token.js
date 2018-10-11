@@ -13,7 +13,7 @@ module.exports=(req,res,next)=>{    //body post metodunda olur
                     message:'Failed to authenticate token'
                 })
             }else{
-                //herşey yolundayda requeste decode edilmiş datayı koymak gerekiyor.belirlediğimiz alan
+                //herşey yolundaysa requeste decode edilmiş datayı koymak gerekiyor.belirlediğimiz alan
                 // olan payload ı burda alacağız.
                 req.decode=decoded;
                 next();// next deme sebebimiz de herşey yolunda herhangi bir route la eşleşebilirsin demek
